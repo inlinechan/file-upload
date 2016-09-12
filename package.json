@@ -1,0 +1,15 @@
+{
+    "name": "file-upload",
+    "version": "0.0.1",
+    "description": "File upload service",
+    "keywords": ["file", "upload"],
+    "repository": "https://github.com/inlinechan/file-upload.git",
+    "homepage": "",
+    "author": "Hyungchan Kim <inlinechan@gmail.com>",
+    "dependencies": {
+        "express": "",
+        "formidable": ""
+    },
+    "main": "index",
+    "license" : "BSD-3-Clause"
+}
