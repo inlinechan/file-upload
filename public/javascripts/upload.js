@@ -10,9 +10,10 @@ function NotificationCenter() {
             context: context || this
         });
     };
-    this.notify = function (event, arg1, arg2) {
+    this.notify = function (event) {
+        var args = Array.prototype.slice.call(arguments, 1);
         this.listeners[event].forEach(function (listener) {
-            listener.handler.call(listener.context, arg1, arg2);
+            listener.handler.apply(listener.context, args);
         });
     };
 }
