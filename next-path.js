@@ -12,7 +12,7 @@ function _nextPath(src) {
     var length = 4;
     var zeros = zeroString(length);
     var next;
-    var number = 1;
+    var number = 0;
 
     if (m[2].length > 0) {
         length = m[2].length;
@@ -27,9 +27,9 @@ function _nextPath(src) {
 
 function nextPath(src, pred) {
     var path = src;
-    do {
+    while (pred(path)) {
         path = _nextPath(path);
-    } while (pred(path));
+    }
     console.log(src, path);
     return path;
 }
