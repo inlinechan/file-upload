@@ -1,7 +1,13 @@
+var ongoingRequest = null;
+
 $('.upload-btn').on('click', function () {
     $('#upload-input').click();
     $('.progress-bar').text('0%');
     $('.progress-bar').width('0%');
+});
+
+$('.cancel-btn').on('click', function() {
+    ongoingRequest.abort();
 });
 
 $('#upload-input').on('change', function () {
@@ -15,7 +21,7 @@ $('#upload-input').on('change', function () {
             formData.append('uploads[]', file, file.name);
         }
 
-        $.ajax({
+        ongoingRequest = $.ajax({
             url: '/upload',
             type: 'POST',
             data: formData,
@@ -23,13 +29,15 @@ $('#upload-input').on('change', function () {
             contentType: false,
             success: function (data) {
                 $('.progress-bar').html('Done');
+                ongoingRequest = null;
                 console.log('upload successful!\n' + data);
             },
-            error: function (err) {
+            error: function (err, status) {
                 $('.progress-bar').width('100%');
-                $('.progress-bar').html('failed');
+                $('.progress-bar').html(status ? status : 'failed');
                 $('.progress-bar').css('background-color', 'red');
 
+                ongoingRequest = null;
                 console.log('upload fail!\n' + err.statusText + ', ' + err.responseText);
             },
             xhr: function () {
