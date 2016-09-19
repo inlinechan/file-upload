@@ -1,13 +1,13 @@
 var ongoingRequest = null;
 
 $('.upload-btn').on('click', function () {
-    $('#upload-input').click();
-    $('.progress-bar').text('0%');
-    $('.progress-bar').width('0%');
-});
-
-$('.cancel-btn').on('click', function() {
-    ongoingRequest.abort();
+    if (ongoingRequest) {
+        ongoingRequest.abort();
+    } else {
+        $('#upload-input').click();
+        $('.progress-bar').text('0%');
+        $('.progress-bar').width('0%');
+    }
 });
 
 $('#upload-input').on('change', function () {
@@ -28,11 +28,13 @@ $('#upload-input').on('change', function () {
             processData: false,
             contentType: false,
             success: function (data) {
+                $('.upload-btn').html('Upload File');
                 $('.progress-bar').html('Done');
                 ongoingRequest = null;
                 console.log('upload successful!\n' + data);
             },
             error: function (err, status) {
+                $('.upload-btn').html('Upload File');
                 $('.progress-bar').width('100%');
                 $('.progress-bar').html(status ? status : 'failed');
                 $('.progress-bar').css('background-color', 'red');
@@ -44,6 +46,9 @@ $('#upload-input').on('change', function () {
                 var xhr = new XMLHttpRequest();
 
                 xhr.upload.addEventListener('progress', function (evt) {
+                    if (ongoingRequest)
+                        $('.upload-btn').html('Cancel');
+
                     if (evt.lengthComputable) {
                         var percentComplete = evt.loaded / evt.total;
                         percentComplete = parseInt(percentComplete * 100);
