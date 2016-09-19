@@ -22,12 +22,17 @@ $('#upload-input').on('change', function () {
             processData: false,
             contentType: false,
             success: function (data) {
+                $('.progress-bar').html('Done');
                 console.log('upload successful!\n' + data);
             },
             error: function (err) {
-                console.log('upload fail!\n' + err);
+                $('.progress-bar').width('100%');
+                $('.progress-bar').html('failed');
+                $('.progress-bar').css('background-color', 'red');
+
+                console.log('upload fail!\n' + err.statusText + ', ' + err.responseText);
             },
-            xhr: function() {
+            xhr: function () {
                 var xhr = new XMLHttpRequest();
 
                 xhr.upload.addEventListener('progress', function (evt) {
@@ -37,10 +42,6 @@ $('#upload-input').on('change', function () {
 
                         $('.progress-bar').text(percentComplete + '%');
                         $('.progress-bar').width(percentComplete + '%');
-
-                        if (percentComplete === 100) {
-                            $('.progress-bar').html('Done');
-                        }
                     }
                 }, false);
 
